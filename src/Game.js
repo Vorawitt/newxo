@@ -71,6 +71,15 @@ class Game extends React.Component {
             onClick={(i) => this.handleClick(i)}
         />
         </div>
+        <div className='board-size'>
+        <label>Enter board size: </label>
+        <input 
+          type="text" 
+          placeholder="Enter a number" 
+          id="board-size"
+          //onChange={(e) => setTempBoardSize(e.target.value)}
+          />
+        </div>
         <div className="game-info">
         <div>{status}</div>
         <ol>{moves}</ol>
