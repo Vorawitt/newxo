@@ -1,19 +1,39 @@
-import './Game.css';
 import React from 'react';
 import Board from './board.js';
-import CalculateWinner from './calculate.js';
+import CalculateWinner from './CalculateWinner.js';
 
 class Game extends React.Component {
   constructor(props) {
     super(props);
+    this.onChangeInputnum = this.onChangeInputnum.bind(this);
+    this.inputnum = this.inputnum.bind(this);
+
+
     this.state = {
       history: [{
-        squares: Array(9).fill(null),
+        squares: []
       }],
       stepNumber: 0,
       xIsNext: true,
+      inputnum: 3
     };
   }
+
+  onChangeInputnum(e) {
+    const inputnum = e.target.value;
+    
+
+    this.setState({
+      inputnum: inputnum,
+      squares: Array((e.target.value)*(e.target.value)).fill(null) // ใส่ array null ถ้ามีการ change inputnum
+    });
+  }
+
+  inputnum(event) {
+    event.preventDefault();
+    
+  }
+
   handleClick(i) {
     const history = this.state.history.slice(0, this.state.stepNumber + 1);
     const current = history[history.length - 1];
@@ -38,11 +58,11 @@ class Game extends React.Component {
     });
   }
 
-
   render() {
     const history = this.state.history;
     const current = history[this.state.stepNumber];
-    const winner = CalculateWinner(current.squares);
+    const inputnum = this.state.inputnum;
+    const winner = CalculateWinner(current.squares,parseInt(inputnum));
 
     const moves = history.map((step, move) => {
       const desc = move ?
@@ -69,16 +89,32 @@ class Game extends React.Component {
         <Board
             squares={current.squares}
             onClick={(i) => this.handleClick(i)}
+            inputnum = {this.state.inputnum}
         />
         </div>
         <div className='board-size'>
         <label>Enter board size: </label>
         <input 
-          type="text" 
+          type="text"
+          onKeyPress={(event) => {
+            if (!/[0-9]/.test(event.key)) {
+              event.preventDefault();
+            }
+          }}
           placeholder="Enter a number" 
           id="board-size"
-          //onChange={(e) => setTempBoardSize(e.target.value)}
+          value={this.state.inputnum}
+          onChange={this.onChangeInputnum}
           />
+          <div className="input-board-size">
+              <button
+                className="btn btn-outline-secondary"
+                type="button"
+                onClick={this.inputnum}
+                >
+                Search
+                </button>
+          </div>
         </div>
         <div className="game-info">
         <div>{status}</div>

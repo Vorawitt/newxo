@@ -1,22 +1,42 @@
-import Square from "./Square.js";
-import React from "react";
+//import { tab } from '@testing-library/user-event/dist/tab';
+import React from 'react';
+import './index.css';
+import  Square from './square'
+
 
 class Board extends React.Component {
-
-  renderSquare(n){
-    const gensquare = []
-    for(let i = 0; i < n*n; i++){
-      gensquare.push(<Square value={this.props.squares[i]} onClick={() => this.props.onClick(i)} />)
+    renderSquare(i) {
+      return(
+          <Square
+          value={this.props.squares[i]}
+          onClick={() => this.props.onClick(i)}
+          />
+        );
     }
-    return gensquare
+    
+    renderRow(props) {
+      let table = []
+      let count = 0
+
+      for (let i = 0; i < this.props.inputnum; i++) {
+        let children = []
+
+        for (let j = 0; j < this.props.inputnum; j++) {
+          children.push(this.renderSquare(count))
+          count = count + 1
+        }
+        table.push(<div className="board-row">{children}</div>)
+      }
+      return table
+    }
+
+    render() {
+        return (
+            <div>
+                  {this.renderRow()}
+            </div>
+        );
+    }
   }
 
-  render() {
-    return (
-      <div className="board">
-        { renderSquare(boardSize) }
-      </div>
-    );
-  }
-}
 export default Board;
